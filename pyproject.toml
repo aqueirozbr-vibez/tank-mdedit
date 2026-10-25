@@ -1,0 +1,20 @@
+[project]
+name = "mdedit"
+version = "0.1.0"
+description = "A small text editor core with a markdown preview, built by the factory."
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".factory-dev"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["mdedit", "tests"]
+exclude = ["(^|/).factory-dev/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

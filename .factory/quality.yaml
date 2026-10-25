@@ -1,0 +1,6 @@
+# Seeded: the tools come from the factory's own environment.
+format: ["uv", "run", "--project", "C:/Users/andre/OneDrive/Desktop/tank/tank-factory/app", "ruff", "format", "--check", "."]
+lint: ["uv", "run", "--project", "C:/Users/andre/OneDrive/Desktop/tank/tank-factory/app", "ruff", "check", "."]
+typecheck: ["uv", "run", "--project", "C:/Users/andre/OneDrive/Desktop/tank/tank-factory/app", "mypy", "."]
+test: ["uv", "run", "--project", "C:/Users/andre/OneDrive/Desktop/tank/tank-factory/app", "pytest", "-q"]
+full_suite: ["uv", "run", "--project", "C:/Users/andre/OneDrive/Desktop/tank/tank-factory/app", "pytest", "-q"]
