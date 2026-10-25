@@ -1,17 +1,18 @@
 # mdedit
 
-A small text editor core with a markdown preview, written by the SENNO software
-factory from hand-written specs (phase 1: spec to green branch, builder on
-Claude Code).
+A small text editor with a live markdown preview in the browser, built by the
+SENNO software factory: each GitHub issue is planned into a spec, built, reviewed
+and opened as a pull request, and a human merges it.
 
-- `specs/` holds one spec per task; each names its files, its acceptance
-  criteria and the unit tests the builder must write.
-- `tests/acceptance/` is the holdout. Humans write it; the factory's builder
-  may not change it. The acceptance tests for these specs are kept outside
-  the repository until a branch is evaluated.
+- **Issues** say what each task must achieve: outcome, scope, non-goals,
+  acceptance criteria and the ids of the hidden acceptance tests.
+- **`specs/`** is where the factory's planner writes one spec per issue.
+- **The `holdout` branch** holds the acceptance tests. Humans write them; the
+  factory runs them against each change, and its builders never see them.
 - Standard library only. Python 3.12, ruff, mypy strict, pytest.
 
-Planned modules: `buffer` (text by offset and line/column), `history`
-(undo/redo), `inline` and `blocks` (markdown to HTML), `search` (find and
-replace) and `stats` (word count, reading time, outline). An editor session
-and command-line entry point that tie them together come after these merge.
+Once every task has merged, run the editor with:
+
+```
+python -m mdedit notes.md
+```

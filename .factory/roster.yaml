@@ -20,9 +20,15 @@ builder:
   max_turns: 80
   phase_cap_usd: 3.00
   timeout_s: 7200
+# TEMPORARY (operator decision, 2026-10-25): the reviewer runs on Claude, the builder's
+# vendor, until an OpenAI key is in place. The PRD (Cap. 4) wants a second vendor here; the
+# factory only accepts this roster from its branch temp/single-vendor-review with
+# FACTORY_SINGLE_VENDOR_REVIEW=1. A different model from the builder keeps some independence.
+# Restore: harness codex, model gpt-5-codex, and drop `thinking`.
 reviewer:
-  harness: codex
-  model: gpt-5-codex
+  harness: claude_code
+  model: claude-sonnet-5-5
+  thinking: high
   tools: [Read, Glob, Grep]
   writes: []
   max_turns: 40

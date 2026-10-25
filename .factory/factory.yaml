@@ -3,3 +3,4 @@
 concurrency_n: 3
 protected_paths: []
 dependency_manifests: ["pyproject.toml", "package.json"]
+holdout_branch: holdout   # the acceptance tests live on this branch; agent worktrees come from main
