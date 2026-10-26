@@ -160,6 +160,35 @@ def test_offset_of_round_trip_and_bounds() -> None:
         empty.offset_of(2, 1)
 
 
+def test_offsets_count_characters_not_bytes() -> None:
+    # Every character below takes more than one byte in UTF-8; offsets and columns
+    # must count characters.
+    text = "é\n日本😀"
+    assert len(text.encode("utf-8")) > len(text)
+    buf = TextBuffer(text)
+
+    assert buf.line_count == 2
+    assert buf.line(2) == "日本😀"
+    assert buf.position_of(1) == (1, 2)
+    assert buf.position_of(2) == (2, 1)
+    assert buf.position_of(5) == (2, 4)
+    assert buf.offset_of(2, 4) == 5
+    with pytest.raises(IndexError):
+        buf.offset_of(2, 5)
+
+    buf.insert(3, "x")
+    assert buf.text == "é\n日x本😀"
+    assert buf.replace(0, 1, "e") == "é"
+    assert buf.delete(3, 4) == "x"
+    assert buf.delete(4, 5) == "😀"
+    assert buf.text == "e\n日本"
+
+    # An offset that is valid in bytes but past the last character is rejected.
+    with pytest.raises(IndexError):
+        buf.insert(len(buf.text) + 1, "X")
+    assert buf.text == "e\n日本"
+
+
 def test_line_count_and_line() -> None:
     assert TextBuffer().line_count == 1
     assert TextBuffer("a").line_count == 1
