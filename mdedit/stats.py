@@ -22,14 +22,19 @@ _FENCE = "```"
 # ``[^\W_]`` is a Unicode letter or digit: ``\w`` without the underscore.
 _WORD_RE = re.compile(r"[^\W_]+(?:['\u2019\-\u2010\u2011][^\W_]+)*")
 
-# An inline link or image ``[label](target)``. The label holds no brackets, so
-# nested constructs such as ``[![alt](img)](url)`` resolve from the inside out
-# when the substitution repeats. The target may contain one level of balanced
-# parentheses and never crosses a line break.
-_LINK_RE = re.compile(r"\[([^\[\]]*)\]\((?:[^()\n]|\([^()\n]*\))*\)")
+# An inline link or image ``[label](target)``. The label may contain one level
+# of balanced brackets (``[see [1]](url)``); nested constructs such as
+# ``[![alt](img)](url)`` resolve from the outside in as the substitution
+# repeats. The target may contain one level of balanced parentheses and never
+# crosses a line break.
+_LINK_RE = re.compile(r"\[((?:[^\[\]]|\[[^\[\]]*\])*)\]\((?:[^()\n]|\([^()\n]*\))*\)")
 
 # An ATX heading: 1 to 6 ``#`` at the start of the line followed by a space.
 _HEADING_RE = re.compile(r"#{1,6} ")
+
+# A line ends at ``\r\n``, ``\r`` or ``\n``: the same characters ``char_count``
+# treats as newlines. Other separators such as a form feed stay inside a line.
+_LINE_BREAK_RE = re.compile(r"\r\n|\r|\n")
 
 _NEWLINES = frozenset("\r\n")
 
@@ -42,7 +47,7 @@ def _prose_lines(text: str) -> list[str]:
     are dropped with the block. An opening fence with no closing fence after it
     does not form a block and stays an ordinary line.
     """
-    lines = text.splitlines()
+    lines = _LINE_BREAK_RE.split(text)
     kept: list[str] = []
     i = 0
     while i < len(lines):

@@ -40,6 +40,9 @@ def test_word_count_counts_link_label_not_url() -> None:
     assert word_count("[one](a/b/c) and [two](d/e/f)") == 3
     # A bracket that is not followed by a parenthesised target is plain text.
     assert word_count("[x] done (really)") == 3
+    # A label may hold balanced brackets; the target is still excluded.
+    assert word_count("[see [1] here](https://x.org/a-b)") == 3
+    assert word_count("[a] [b](https://x.org/c-d)") == 2
 
 
 def test_fenced_code_ignored_by_word_count_and_outline() -> None:
@@ -111,3 +114,8 @@ def test_outline_levels_and_stripped_titles() -> None:
         (1, "Earlier level"),
     ]
     assert outline("") == []
+    # Windows and old Mac line endings separate lines.
+    assert outline("# A\r\n## B\r### C\r\n") == [(1, "A"), (2, "B"), (3, "C")]
+    # Only \n and \r end a line, matching char_count: a form feed or a Unicode
+    # line separator stays inside the heading line.
+    assert outline("# A\x0cB\n## C\u2028D") == [(1, "A\x0cB"), (2, "C\u2028D")]
