@@ -1,7 +1,7 @@
 # mdedit
 
 A small text editor with a live markdown preview in the browser, built by the
-SENNO software factory: each GitHub issue is planned into a spec, built, reviewed
+Tank Factory: each GitHub issue is planned into a spec, built, reviewed
 and opened as a pull request, and a human merges it.
 
 - **Issues** say what each task must achieve: outcome, scope, non-goals,
